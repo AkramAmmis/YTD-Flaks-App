@@ -1,12 +1,7 @@
 from flask import Flask
-from flask import render_template, redirect, url_for, flash, request
-from pytube import YouTube
-from os import rename
-
 
 app = Flask(__name__)
-
-
+app.config['SECRET_KEY']='DOWN-YT00'
 
 from view import view
 app.register_blueprint(view)
