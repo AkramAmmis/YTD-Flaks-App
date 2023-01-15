@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container">
+    <center>
+        <h1 style="margin: 10px;">- YouTube Downloader -</h1>
+
+
+        <form action="/get_youtube" method="POST">
+            <div class="input-group flex-nowrap" style="width: 500px;">
+                <span class="input-group-text">Enter Url</span>
+                <input name="url" id="url" type="text" class="form-control" placeholder="Enter url for video or playlist" aria-describedby="addon-wrapping">
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#info_video" aria-expanded="false" aria-controls="info_video">Ok</button>
+        </form><br>
+
+        {% if show_v == "on" %}
+        <div class="card collapse show" style="width: 400px;" id="info_video">
+            <img src={{thumbnail_url}} class="card-img-top" alt="not" style="height: auto;">
+            <div class="card-body">
+                <span class="badge rounded-pill text-bg-dark" style="font-size: 17px;">Video</span>
+                <span class="badge rounded-pill text-bg-dark" style="font-size: 17px;">Views : {{views}}</span>
+
+                <h3 class="card-title" style="margin-top:6px ;">{{title}}</h3>
+                <p class="card-text">{{description}} - <a href={{url}}>Show in youtube</a></p>
+
+                <div class="dropdown">
+                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        download
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li></li>
+                        <li><a class="dropdown-item btn" href="/down_audio">Audio</a></li>
+                        <li><a class="dropdown-item btn" data-bs-toggle="collapse" href="#quality" role="button" aria-expanded="false" aria-controls="quality">Video</a></li>
+                        <li><a class="dropdown-item btn" href="/down_thumbnail">thumbnail</a></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div class="collapse" id="quality" style="margin-top: 10px;">
+                    <h5>Choose quality</h5>
+                    <a href="/down_high" class="btn btn-outline-primary">High</a>
+                    <a href="/down_low" class="btn btn-outline-primary">Low</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if show_pl == "on" %}
+        <div class="card collapse show" style="width: 400px;" id="info_playlist">
+            <img src={{thumbnail_url_pl}} class="card-img-top" alt="not" style="height: auto;">
+            <div class="card-body">
+                <span class="badge rounded-pill text-bg-dark" style="font-size: 17px;">Playlist</span>
+                <span class="badge rounded-pill text-bg-dark" style="font-size: 17px;">
+                    Views : {{views_pl}}
+                </span>
+                <span class="badge rounded-pill text-bg-dark" style="font-size: 17px;">videos numbers : {{number_videos}} </span>
+
+                <h3 class="card-title">{{title_pl}}</h3>
+
+                <p class="card-text" style="margin-top: 6px;"><a href={{url_pl}}>Show in youtube</a></p>
+                <a class="btn btn-primary" data-bs-toggle="collapse" href="#quality_pl" role="button" aria-expanded="false" aria-controls="quality_pl">Download All Videos</a>
+                <div class="collapse" id="quality_pl" style="margin-top: 10px;">
+                    <h5>Choose quality</h5>
+                    <a href="/down_pl_high" class="btn btn-outline-primary">High</a>
+                    <a href="/down_pl_low" class="btn btn-outline-primary">Low</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </center>
+</div>
+{% endblock %}
