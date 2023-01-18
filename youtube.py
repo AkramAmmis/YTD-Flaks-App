@@ -20,7 +20,7 @@ def download_video(url,quality):
     else:
         down_video = video.streams.get_lowest_resolution()
 
-    down = down_video.download('/home/kim0/Desktop')
+    down = down_video.download('/home')
     YouTube(url, on_complete_callback=True)
     flash('downloaded success', category="success")
 
