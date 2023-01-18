@@ -5,7 +5,7 @@ import wget
 def download_audio(url):
     video = YouTube(url)
     audio = video.streams.get_audio_only()
-    down = audio.download('/home/kim0/Desktop')
+    down = audio.download('/home')
     YouTube(url, on_complete_callback=True)
     flash('downloaded success', category="success")
     convert_mp3 = down.removesuffix('.mp4')
@@ -25,5 +25,5 @@ def download_video(url,quality):
     flash('downloaded success', category="success")
 
 def download_thumbnail(url):
-    wget.download(url, '/home/kim0/Desktop/img.jpg')
+    wget.download(url, '/home/img.jpg')
     flash('downloaded success', category="success")
