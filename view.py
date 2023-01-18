@@ -1,3 +1,4 @@
+from youtube import *
 from flask import render_template, redirect, url_for, flash, request , Blueprint
 from pytube import YouTube,Playlist
 from os import rename
@@ -19,6 +20,7 @@ data_video = {
 data_playlist = {
     'url':'url',
     'title' : '',
+    'description' : '',
     'views' : '',
     'number_videos' : '',
     'thumbnail_url' : '',
@@ -31,7 +33,6 @@ def internet_test():
         return True
     except OSError: 
         return False
-
 
 
 @view.route('/get_youtube', methods=['POST' ,'GET'])
@@ -60,7 +61,7 @@ def get_youtube():
                         data_video['thumbnail_url'] = video.thumbnail_url
                         description = video.description
                         data_video['description'] = " ".join(description.split()[:25])
-
+                        
             else:
                 playlist = Playlist(url)
                 if playlist:
@@ -81,11 +82,11 @@ def get_youtube():
     else :
         flash('Pless Enter Url!', category='error')
 
-    return redirect(url_for('view.down_page'))
+    return redirect(url_for('view.home'))
 
 @view.route('/')
-def down_page():
-    return render_template('down_page.html', title_page = 'Download Page',
+def home():
+    return render_template('home.html', title_page = 'Home',
     show_pl = data_playlist['show'],
     show_v = data_video['show'],
     url_pl = data_playlist['url'],
@@ -93,7 +94,7 @@ def down_page():
     views_pl = data_playlist['views'],
     number_videos = data_playlist['number_videos'],
     thumbnail_url_pl = data_playlist['thumbnail_url'],
-    ####
+    #######################
     url = data_video['url'],
     title = data_video['title'],
     views = data_video['views'],
@@ -104,60 +105,27 @@ def down_page():
 @view.route('/down_audio')
 def down_audio():
     #download audio
-    video = YouTube(data_video['url'])
-    audio = video.streams.get_audio_only()
-    down = audio.download('/home/kim0/Desktop')
-    flash('Start download ... ', category="success")
-    YouTube(data_video['url'], on_complete_callback=True)
-    flash('downloaded success', category="success")
-    #convert to mp3
-    convert_mp3 = down.removesuffix('.mp4')
-    mp3 = (convert_mp3 + '.mp3')
-    rename(down, mp3)
-    return redirect(url_for('view.down_page'))
+    download_audio(data_video['url'])
+    return redirect(url_for('view.home'))
 
 @view.route('/down_high')
 def down_high():
     #download
-    video = YouTube(data_video['url'])
-    down_video = video.streams.get_highest_resolution()
-    down = down_video.download('/home/kim0/Desktop')
-    YouTube(data_video['url'], on_complete_callback=True)
-    flash('downloaded success', category="success")
-    return redirect(url_for('view.down_page'))
+    download_video(data_video['url'], 'high')
+    return redirect(url_for('view.home'))
 
 @view.route('/down_low')
 def down_low():
     #download 
-    video = YouTube(data_video['url'])
-    down_video = video.streams.get_lowest_resolution()
-    down = down_video.download('/home/kim0/Desktop')
-    YouTube(data_video['url'], on_complete_callback=True)
-    flash('downloaded success', category="success")
-    return redirect(url_for('view.down_page'))
+    download_video(data_video['url'], 'low')
+    return redirect(url_for('view.home'))
 
 @view.route('/down_thumbnail')
 def down_thumbnail():
-    name = data_video['title']
-    thumbnail_url = data_video['thumbnail_url']
-    wget.download(thumbnail_url, f'/home/kim0/Desktop/{name}.jpg')
-    flash('downloaded success', category="success")
-    return redirect(url_for('view.down_page'))
+    download_thumbnail(data_video['url'])
+    return redirect(url_for('view.home'))
 
-
-@view.route('/down_pl_low')
-def down_pl_low():
-    playlist = Playlist(data_playlist['url'])
-    videos = playlist.video_urls
-    for video_url in videos:
-        video = YouTube(video_url)
-        down_video = video.streams.get_lowest_resolution()
-        down = down_video.download('/home/kim0/Desktop')
-        YouTube(video_url, on_complete_callback=True)
-        flash('downloaded success', category="success")
-    return redirect(url_for('view.down_page'))
-
-
+############# PlayList #############
 @view.route('/down_pl_high')
 def down_pl_high():
     playlist = Playlist(data_playlist['url'])
@@ -168,4 +136,52 @@ def down_pl_high():
         down = down_video.download('/home/kim0/Desktop')
         YouTube(video_url, on_complete_callback=True)
         flash('downloaded success', category="success")
-    return redirect(url_for('view.down_page'))
+    return redirect(url_for('view.home'))
+
+@view.route('/playlist')
+def playlist():
+    videos = []
+    urls = []
+    try:
+        playlist = Playlist(data_playlist['url'])
+        videos_url = playlist.video_urls
+        for url in videos_url : 
+            urls.append(url)
+            video = YouTube(url)
+            videos.append(video)
+    except KeyError:
+        flash('pls enter the url!',category='error')
+        return redirect(url_for('view.home'))
+    return render_template('playlist.html', title_page='PlayList',
+    url_pl = data_playlist['url'],
+    title_pl = data_playlist['title'],
+    views_pl = data_playlist['views'],
+    number_videos = data_playlist['number_videos'],
+    videos = videos,
+    urls = urls
+    )
+    
+@view.route('/down_thumbnail_pl/<path:url>')
+def down_thumbnail_pl(url):
+    download_thumbnail(url)
+    return redirect(url_for('view.playlist'))
+
+
+@view.route('/down_audio_pl/<path:id_video>')
+def down_audio_pl(id_video):
+    url_video = (f'https://www.youtube.com/{id_video}')
+    download_audio(url_video)
+    return redirect(url_for('view.playlist'))
+
+
+@view.route('/down_low_pl/<path:id_video>')
+def down_low_pl(id_video):
+        url_video = (f'https://www.youtube.com/{id_video}')
+        download_video(url_video, 'low')
+        return redirect(url_for('view.playlist'))
+
+@view.route('/down_high_pl/<path:id_video>')
+def down_high_pl(id_video):
+        url_video = (f'https://www.youtube.com/{id_video}')
+        download_video(url_video, 'high')
+        return redirect(url_for('view.playlist'))
