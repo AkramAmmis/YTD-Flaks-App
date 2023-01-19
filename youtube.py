@@ -1,11 +1,21 @@
 from pytube import Playlist, YouTube 
 from flask import flash
 import wget
+from os import path,rename,name,environ
+home_dir = path.expanduser('~')
+download_dir = path.join(home_dir, 'Downloads')
+
+def dir_download():
+    global download_dir
+    if os.name == 'nt':
+        download_dir = path.join(os.environ['USERPROFILE'], 'Downloads')
+    elif os.name == 'posix':
+        download_dir = path.join(os.environ['HOME'], 'Downloads')
 
 def download_audio(url):
     video = YouTube(url)
     audio = video.streams.get_audio_only()
-    down = audio.download('/home')
+    down = audio.download(download_dir)
     YouTube(url, on_complete_callback=True)
     flash('downloaded success', category="success")
     convert_mp3 = down.removesuffix('.mp4')
@@ -20,10 +30,10 @@ def download_video(url,quality):
     else:
         down_video = video.streams.get_lowest_resolution()
 
-    down = down_video.download('/home')
+    down = down_video.download(download_dir)
     YouTube(url, on_complete_callback=True)
     flash('downloaded success', category="success")
 
 def download_thumbnail(url):
-    wget.download(url, '/home/img.jpg')
+    wget.download(url, download_dir)
     flash('downloaded success', category="success")
