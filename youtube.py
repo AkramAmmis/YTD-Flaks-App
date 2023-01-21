@@ -34,9 +34,10 @@ def download_video(url,quality):
     YouTube(url, on_complete_callback=True)
     flash('downloaded success', category="success")
 
-def download_thumbnail(url,id_video):
+
+def download_thumbnail(url,title):
     img = requests.get(url)
-    save_path = path.join(download_dir, f'thumbnai{id_video}.jpg')
+    save_path = path.join(download_dir, f'{title}.jpg')
     with open(save_path , 'wb') as i:
         i.write(img.content)
     flash('downloaded success', category="success")
