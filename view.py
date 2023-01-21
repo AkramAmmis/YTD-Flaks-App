@@ -122,7 +122,9 @@ def down_low():
 
 @view.route('/down_thumbnail')
 def down_thumbnail():
-    download_thumbnail(data_video['url'])
+    video  = YouTube(data_video['url'])
+    title =  video.title
+    download_thumbnail(data_video['thumbnail_url'],title)
     return redirect(url_for('view.home'))
 
 ############# PlayList #############
@@ -161,9 +163,13 @@ def playlist():
     urls = urls
     )
     
-@view.route('/down_thumbnail_pl/<path:url>')
-def down_thumbnail_pl(url):
-    download_thumbnail(url)
+@view.route('/down_thumbnail_pl/<path:id_video>')
+def down_thumbnail_pl(id_video):
+    url_video = (f'https://www.youtube.com/{id_video}')
+    video =YouTube(url_video)
+    url_thumbnail = video.thumbnail_url
+    title = video.title
+    download_thumbnail(url_thumbnail,title)
     return redirect(url_for('view.playlist'))
 
 
