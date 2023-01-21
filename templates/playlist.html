@@ -25,7 +25,7 @@
                     <img src="{{video.thumbnail_url}}" class="card-img-top" alt="not" style="height: auto;">
                     <div class="card-body">
                         <span class="badge rounded-pill text-bg-dark" style="font-size: 17px;">Video</span>
-                        <span class="badge rounded-pill text-bg-dark" style="font-size: 17px;">Views : {{video.views}}</span>
+                        <span class="badge rounded-pill text-bg-dark" style="font-size: 17px;">Views : {{video.views | int}}</span>
 
                         <h3 class="card-title" style="margin-top:6px ;">{{video.title}}</h3>
 
