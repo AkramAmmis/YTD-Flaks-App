@@ -6,6 +6,7 @@ import urllib
 import socket
 import wget
 
+
 view = Blueprint('view', __name__)
 
 data_video = {
@@ -60,8 +61,7 @@ def get_youtube():
                         data_video['views'] = video.views
                         data_video['thumbnail_url'] = video.thumbnail_url
                         description = video.description
-                        data_video['description'] = " ".join(description.split()[:25])
-                        
+                        data_video['description'] = " ".join(description.split()[:25])          
             else:
                 playlist = Playlist(url)
                 if playlist:
