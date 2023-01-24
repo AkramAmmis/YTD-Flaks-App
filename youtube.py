@@ -2,6 +2,7 @@ from pytube import Playlist, YouTube
 from flask import flash
 import wget
 from os import path,rename,name,environ
+import requests
 home_dir = path.expanduser('~')
 download_dir = path.join(home_dir, 'Downloads')
 
