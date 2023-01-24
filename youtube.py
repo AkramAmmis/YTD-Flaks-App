@@ -1,11 +1,12 @@
 from pytube import Playlist, YouTube 
-from flask import flash
+from flask import flash,request
 import wget
 from os import path,rename,name,environ
 import requests
 
 home_dir = path.expanduser('~')
 download_dir = path.join(home_dir, 'Downloads')
+
 
 def dir_download():
     global download_dir
@@ -35,7 +36,6 @@ def download_video(url,quality):
     down = down_video.download(download_dir)
     YouTube(url, on_complete_callback=True)
     flash('downloaded success', category="success")
-
 
 def download_thumbnail(url,title):
     img = requests.get(url)
