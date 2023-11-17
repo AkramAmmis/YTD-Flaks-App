@@ -12,4 +12,4 @@ if __name__ == '__main__' :
     app.run_app(debug=True)
 
 
-#Free Palestine
+#Freedom
