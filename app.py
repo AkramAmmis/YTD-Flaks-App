@@ -10,3 +10,6 @@ app.register_blueprint(view)
 if __name__ == '__main__' :
     app = create_app()
     app.run_app(debug=True)
+
+
+#Free Palestine
