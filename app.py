@@ -8,8 +8,7 @@ app.register_blueprint(view)
 
 
 if __name__ == '__main__' :
-    app = create_app()
-    app.run_app(debug=True)
+   
+    app.run(debug=True)
 
 
-#Freedom0
